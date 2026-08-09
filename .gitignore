@@ -3,3 +3,4 @@ config.py
 app.db
 ragnar2
 .flaskenv
+ragnar
