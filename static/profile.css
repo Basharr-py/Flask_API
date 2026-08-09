@@ -1,0 +1,145 @@
+/* Profile panel styles — built to match your existing dashboard look */
+.dashboard-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #0b1220, #07101a);
+  color: #e6eef8;
+  font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Header overrides */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 28px;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  background: transparent;
+}
+
+.dashboard-header h2 { margin: 0; font-size: 20px; }
+.subtitle { color: #9fb0c9; font-size: 13px; margin-top: 4px; }
+
+/* Main content */
+.dashboard-content { padding: 28px; width: 100%; max-width: 1200px; margin: 0 auto; }
+
+/* Profile card layout */
+.profile-card {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 24px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  padding: 22px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.03);
+  box-shadow: 0 10px 30px rgba(3,6,16,0.6);
+}
+
+/* Avatar column */
+.avatar-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 8px;
+}
+
+.avatar-wrap {
+  width: 180px;
+  height: 180px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #123a66, #09203b);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.upload-form { width: 100%; text-align: center; }
+.btn-upload {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 8px 14px;
+  background: rgba(35,162,246,0.12);
+  color: #dff6ff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  border: 1px solid rgba(35,162,246,0.18);
+}
+.hidden-input { display: none; }
+
+.meta h3 { margin: 0; font-size: 18px; }
+.meta .muted { margin-top: 4px; color: #9fb0c9; font-size: 13px; }
+
+/* Details column (form) */
+.details-column { padding: 4px 6px; }
+
+.profile-form .form-row { margin-bottom: 14px; display: flex; flex-direction: column; }
+.profile-form label { font-size: 13px; color: #cfe9ff; margin-bottom: 6px; }
+.profile-form input[type="text"],
+.profile-form input[type="email"],
+.profile-form input[type="url"],
+.profile-form textarea {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.04);
+  padding: 10px 12px;
+  color: #e9f7ff;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.profile-form textarea { resize: vertical; min-height: 86px; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.form-actions { display: flex; gap: 12px; margin-top: 6px; align-items: center; }
+.btn-submit {
+  background: linear-gradient(135deg,#23a2f6,#1845ad);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.btn-cancel {
+  padding: 10px 12px;
+  color: #9fb0c9;
+  text-decoration: none;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.02);
+}
+
+/* Account section */
+.section-divider { margin: 18px 0; border: none; height: 1px; background: rgba(255,255,255,0.02); }
+.account-section h4 { margin: 0 0 8px 0; color: #dbeeff; font-size: 15px; }
+.account-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; color: #cbdff6; }
+.pill { padding: 6px 10px; border-radius: 999px; font-size: 13px; font-weight: 700; }
+.pill-success { background: rgba(76,175,80,0.12); color: #9bf2b1; border: 1px solid rgba(76,175,80,0.18); }
+.pill-muted { background: rgba(255,255,255,0.02); color: #9fb0c9; border: 1px solid rgba(255,255,255,0.02); }
+
+.btn-danger {
+  margin-top: 14px;
+  background: rgba(255,90,90,0.12);
+  color: #ffb6b6;
+  border: 1px solid rgba(255,90,90,0.16);
+  padding: 10px 12px;
+  border-radius: 8px;
+}
+
+/* Responsive */
+@media (max-width: 880px) {
+  .profile-card { grid-template-columns: 1fr; }
+  .avatar-wrap { width: 140px; height: 140px; }
+  .two-col { grid-template-columns: 1fr; }
+}

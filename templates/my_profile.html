@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Profile — Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='register.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}">
+</head>
+<body>
+  <!-- Use your existing dashboard wrapper and navigation -->
+  <div class="dashboard-wrapper">
+    <!-- Sidebar / Topnav should be included by your base template -->
+    <header class="dashboard-header">
+      <div class="header-left">
+        <h2>Profile</h2>
+        <p class="subtitle">Manage your account details</p>
+      </div>
+      <div class="header-right">
+        <!-- Notification bell can link to notifications page or partial -->
+        <p>🔔</p>
+      </div>
+    </header>
+
+    <main class="dashboard-content">
+      <section class="profile-panel">
+        <div class="profile-card">
+          <div class="avatar-column">
+            <div class="avatar-wrap">
+              <!-- Render user's avatar from server -->
+              <img src="{{ current_user.avatar }}" alt="Avatar" class="avatar-img">
+            </div>
+
+            <!-- Avatar upload form handled by Python -->
+            <form action="{{ url_for('profile') }}" method="post" enctype="multipart/form-data" class="upload-form">
+              
+              <label class="btn-upload">
+                Change avatar
+                <input type="file" name="avatar" accept="image/*" class="hidden-input">
+              </label>
+            </form>
+
+            <div class="meta">
+              <h3>{{ current_user.username }}</h3>
+              <p class="muted">{{ current_user.email }}</p>
+            </div>
+          </div>
+
+          <div class="details-column">
+            <form action="{{ url_for('editProfile') }}" method="post" class="profile-form">
+            
+
+              <div class="form-row">
+                <label for="name">Display name</label>
+                <input id="display_name" name="name" type="text" value="{{ current_user.name }}" placeholder="Display name">
+                {% for error in form.name.errors %}
+                <label>{{ error }}</label>
+                {% endfor %}
+
+              </div>
+
+              <div class="form-row">
+                <label for="username">Username</label>
+                <input id="username" name="username" type="text" value="{{ current_user.username }}" placeholder="username">
+                {% for error in form.username.errors %}
+                <label>{{ error }}</label>
+                {% endfor %}
+              </div>
+
+              
+
+              <div class="form-row">
+                <label for="bio">Bio</label>
+                <textarea id="bio" name="bio" rows="4" placeholder="Tell others about yourself">{{ current_user.bio }}</textarea>
+                {% for error in form.bio.errors %}
+                <label>{{ error }}</label>
+                {% endfor %}
+              </div>
+
+              <div class="form-row two-col">
+                <div>
+                  <label for="location">Location</label>
+                  <input id="location" name="location" type="text" value="{{ current_user.location }}">
+                </div>
+                <div>
+                  <label for="website">Website</label>
+                  <input id="website" name="website" type="url" value="" placeholder="https://">
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <a href="{{url_for('editProfile')}}"><button type="submit" class="btn-submit">Save changes</button></a>
+                <a href="{{ url_for('new_dash') }}" class="btn-cancel">Cancel</a>
+              </div>
+            </form>
+
+            <hr class="section-divider">
+
+            <div class="account-section">
+              <h4>Account</h4>
+              <div class="account-row">
+                <p>Member since</p>
+                <p class="muted">{{ moment(current_user.created_at).format('LL')}}</p>
+              </div>
+              <div class="account-row">
+                <p>Two-factor authentication</p>
+                <div>
+                  {% if current_user.two_factor_enabled %}
+                    <span class="pill pill-success">Enabled</span>
+                    <a href="{{ url_for('register') }}" class="link">Disable</a>
+                  {% else %}
+                    <span class="pill pill-muted">Disabled</span>
+                    <a href="{{ url_for('register') }}" class="link">Enable</a>
+                  {% endif %}
+                </div>
+              </div>
+
+              <form action="{{ url_for('register') }}" method="post" onsubmit="return confirm('Are you sure you want to delete your account? This is irreversible.');">
+                <button type="submit" class="btn-danger">Delete account</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  {{moment.include_moment()}}
+</body>
+</html>

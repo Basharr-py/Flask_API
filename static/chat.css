@@ -1,0 +1,299 @@
+/* =========================================================  
+   Chat UI — full stylesheet (desktop-focused + responsive)  
+   Includes collapsible sidebar grid and desktop tweaks  
+   ========================================================= */  
+
+/* Base / Theme */  
+:root{  
+  --bg-1: #07101a;  
+  --bg-2: #030611;  
+  --panel-bg: rgba(255,255,255,0.02);  
+  --muted: #9fb0c9;  
+  --text: #e6eef8;  
+  --accent: #26a6fb;  
+  --accent-2: #1b64d6;  
+  --me-bg-1: #1b4f8a;  
+  --me-bg-2: #0f2f5a;  
+  --shadow-strong: rgba(0,0,0,0.45);  
+}  
+
+/* Chat layout */  
+.chat-wrapper {  
+  min-height:100vh;  
+  background: linear-gradient(180deg,var(--bg-1),var(--bg-2));  
+  color:var(--text);  
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;  
+}  
+.chat-content {  
+  display:grid;  
+  grid-template-columns: 360px 1fr; /* desktop default: sidebar + main */  
+  gap: 24px;  
+  max-width: 1400px; /* wider desktop canvas */  
+  margin: 32px auto;  
+  padding: 32px 28px;  
+}  
+
+/* Sidebar */  
+.chat-sidebar {  
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));  
+  border:1px solid rgba(255,255,255,0.03);  
+  border-radius:12px;  
+  padding:18px;  
+  display:flex;  
+  flex-direction:column;  
+  min-height: calc(100vh - 96px);  
+  max-height: calc(100vh - 96px);  
+  overflow:auto;  
+  transition: transform .22s cubic-bezier(.2,.9,.3,1), opacity .18s ease;  
+}  
+.sidebar-top h3 { margin:0 0 6px 0; color:#dbeeff; }  
+.session-list { list-style:none; margin:10px 0 0 0; padding:0; display:flex; flex-direction:column; gap:12px; overflow:auto; }  
+.session-item { display:flex; align-items:center; gap:16px; padding:12px; border-radius:12px; cursor:pointer; transition:background .12s ease, transform .06s ease, box-shadow .12s ease; }  
+.session-item:hover { background: rgba(255,255,255,0.01); transform: translateY(-2px); box-shadow: 0 8px 20px var(--shadow-strong); }  
+.session-item.active { background: linear-gradient(90deg, rgba(35,162,246,0.08), rgba(24,69,173,0.04)); border:1px solid rgba(35,162,246,0.12); }  
+.sess-avatar { width:52px; height:52px; border-radius:12px; object-fit:cover; }  
+.sess-meta .sess-title { font-weight:700; color:#eaf7ff; }  
+.sess-sub { font-size:13px; color:var(--muted); margin-top:6px; }  
+.sess-badge { margin-left:auto; background:#ff6b6b; color:#fff; font-weight:700; font-size:12px; padding:6px 8px; border-radius:999px; }  
+
+/* Sidebar footer */  
+.sidebar-footer { margin-top:auto; display:flex; justify-content:center; padding-top:8px; }  
+.sidebar-footer .btn-small {  
+  padding:10px 12px;  
+  border-radius:10px;  
+  font-weight:700;  
+  background: linear-gradient(180deg,var(--accent),var(--accent-2));  
+  color:#fff;  
+  border:none;  
+  cursor:pointer;  
+}  
+
+/* Main chat */  
+.chat-main { display:flex; flex-direction:column; gap:16px; min-height:78vh; }  
+.chat-header {  
+  display:flex;  
+  justify-content:space-between;  
+  align-items:center;  
+  padding:16px 20px;  
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);  
+  border-radius:12px;  
+  border:1px solid rgba(255,255,255,0.02);  
+}  
+.chat-title { display:flex; align-items:center; gap:12px; }  
+.chat-header-avatar { width:56px; height:56px; border-radius:12px; object-fit:cover; }  
+.chat-name { font-weight:800; color:#eaf7ff; font-size:18px; }  
+.chat-status { font-size:13px; color:var(--muted); margin-top:2px; }  
+.chat-actions .link { color:var(--muted); margin-left:8px; }  
+
+/* Messages container */  
+.chat-messages {  
+  flex:1;  
+  overflow:auto;  
+  padding:24px;  
+  border-radius:12px;  
+  border:1px solid rgba(255,255,255,0.02);  
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));  
+  display:flex;  
+  flex-direction:column;  
+  gap:16px;  
+  box-shadow: inset 0 8px 30px rgba(0,0,0,0.25);  
+}  
+
+/* Day divider / system */  
+.msg-day {  
+  text-align:center;  
+  font-size:13px;  
+  color:#94a9bf;  
+  padding:6px 12px;  
+  border-radius:999px;  
+  background:rgba(255,255,255,0.01);  
+  width:max-content;  
+  margin:6px auto;  
+}  
+.message { display:flex; gap:12px; align-items:flex-end; max-width:68%; }  
+.message .msg-avatar { width:48px; height:48px; border-radius:10px; object-fit:cover; }  
+
+/* Message bubble */  
+.msg-bubble {  
+  background: linear-gradient(180deg,#06202a,#04151c);  
+  padding:12px 14px;  
+  border-radius:14px;  
+  color:var(--text);  
+  box-shadow: 0 6px 18px var(--shadow-strong);  
+  border:1px solid rgba(255,255,255,0.02);  
+  transition: transform .12s ease, box-shadow .12s ease;  
+}  
+.msg-bubble .msg-meta { font-size:13px; color:var(--muted); margin-bottom:8px; display:flex; gap:8px; align-items:center; }  
+.msg-name { font-weight:700; color:#eaf7ff; }  
+.msg-time { font-weight:500; color:#89a6bf; }  
+.msg-text { font-size:15px; line-height:1.5; color:#dff3ff; }  
+
+/* "Me" messages align right */  
+.message-me { margin-left:auto; justify-content:flex-end; }  
+.message-me .msg-bubble.me {  
+  background: linear-gradient(180deg,var(--me-bg-1),var(--me-bg-2));  
+  border:1px solid rgba(35,162,246,0.12);  
+  color:#eaf7ff;  
+}  
+
+/* Other messages align left */  
+.message-other { justify-content:flex-start; }  
+
+/* System messages */  
+.message-system { justify-content:center; }  
+.sys-text {  
+  font-size:13px;  
+  color:#7f98ac;  
+  background:transparent;  
+  padding:6px 10px;  
+  border-radius:8px;  
+}  
+
+/* Attachments in messages */  
+.msg-attachment { margin-top:10px; display:flex; gap:10px; }  
+.attachment-item { display:flex; gap:12px; align-items:center; background:rgba(255,255,255,0.02); padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.01); }  
+.attach-icon { font-size:20px; }  
+.attach-meta .attach-name { font-weight:700; color:#eaf7ff; }  
+.attach-meta .attach-size { font-size:12px; color:var(--muted); }  
+
+/* Composer */  
+.chat-composer { padding:14px; border-radius:12px; background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent); border:1px solid rgba(255,255,255,0.02); display:flex; flex-direction:column; gap:10px; }  
+.composer-form { display:flex; gap:12px; align-items:center; }  
+.composer-attach { width:52px; height:52px; display:inline-grid; place-items:center; background:rgba(255,255,255,0.02); border-radius:12px; cursor:pointer; border:1px dashed rgba(255,255,255,0.02); }  
+.hidden-file { display:none; }  
+.composer-input {  
+  flex:1;  
+  min-height:52px;  
+  max-height:140px;  
+  resize:none;  
+  padding:12px 14px;  
+  border-radius:12px;  
+  background:rgba(255,255,255,0.02);  
+  color:var(--text);  
+  border:1px solid rgba(255,255,255,0.02);  
+  font-size:15px;  
+}  
+.composer-send {  
+  background: linear-gradient(180deg,var(--accent),var(--accent-2));  
+  color: #fff;  
+  border: none;  
+  padding:11px 16px;  
+  border-radius:12px;  
+  font-weight:700;  
+  cursor: pointer;  
+  box-shadow: 0 8px 20px rgba(27,100,214,0.18);  
+  transition: transform .08s ease;  
+}  
+.composer-send:active { transform: translateY(1px); }  
+
+/* Composer hint */  
+.composer-hint { font-size:13px; color:#8ea6bd; }  
+
+/* Hover affordances for desktop */  
+.msg-bubble:hover { box-shadow: 0 18px 40px var(--shadow-strong); transform: translateY(-2px); }  
+
+/* Light theme overrides (optional) */  
+body.light .chat-wrapper { background: #f6fbff; color:#10232b; }  
+body.light .chat-sidebar { background:#fff; border-color:#e6f0f8; }  
+body.light .chat-messages { background:#ffffff; border-color:#e6f0f8; }  
+body.light .msg-bubble { background:#f4fbff; color:#09212a; border-color:#e6f6ff; }  
+body.light .msg-bubble.me { background:linear-gradient(180deg,#e6f5ff,#d9eeff); border-color:#cfeeff; }  
+body.light .composer-input { background:#fff; color:#0b2a34; border-color:#e6f0f8; }  
+
+/* =========================
+   Responsive / Collapsible
+   ========================= */
+
+/* Small screens: collapse sidebar into a drawer; body.sidebar-open toggles visibility */
+@media (max-width: 980px) {
+  .chat-content {
+    grid-template-columns: 1fr; /* single column */
+    gap: 12px;
+    padding: 18px;
+    max-width: 100%;
+  }
+
+  /* Sidebar becomes a hidden off-canvas panel */
+  .chat-sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 300px;
+    max-width: 82%;
+    transform: translateX(-110%);
+    opacity: 0;
+    z-index: 60;
+    box-shadow: 0 30px 80px rgba(2,6,23,0.6);
+    border-radius: 0 12px 12px 0;
+    transition: transform .28s cubic-bezier(.2,.9,.3,1), opacity .2s ease;
+  }
+
+  /* When body has .sidebar-open, show the sidebar */
+  body.sidebar-open .chat-sidebar {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  /* Add an overlay to dim the content when sidebar is open */
+  body.sidebar-open::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(2,6,23,0.45);
+    z-index: 50;
+    transition: opacity .18s ease;
+  }
+
+  /* Main chat area remains full width */
+  .chat-main { min-height: calc(100vh - 120px); }
+
+  /* Reduce avatar/button sizes to fit */
+  .chat-header-avatar { width:44px; height:44px; }
+  .sess-avatar { width:44px; height:44px; }
+  .composer-attach { width:44px; height:44px; }
+
+  /* Tweak composer for mobile */
+  .composer-input { min-height:44px; font-size:14px; }
+  .composer-send { padding:10px 12px; }
+
+  /* Hide sidebar footer on small screens for compactness */
+  .sidebar-footer { display:none; }
+}
+
+/* Medium screens: show compact sidebar (tablet) */
+@media (min-width: 981px) and (max-width: 1199px) {
+  .chat-content { max-width: 1100px; padding: 20px; gap: 18px; grid-template-columns: 320px 1fr; }
+  .chat-sidebar { width: 320px; padding:16px; }
+  .sess-avatar { width:48px; height:48px; }
+}
+
+/* Wide-screen tweaks */
+@media (min-width: 1400px) {
+  .chat-content { gap:32px; padding:40px 36px; max-width:1600px; }
+  .chat-sidebar { width:380px; }
+  .message { max-width:62%; }
+  .message-me { max-width:62%; }
+}
+
+/* Accessibility: focus outlines */
+.session-item:focus, .composer-attach:focus, .composer-send:focus, .composer-input:focus {
+  outline: 3px solid rgba(38,166,251,0.12);
+  outline-offset: 3px;
+  border-radius: 10px;
+}
+
+/* Utility: quick toggle button (for implementer) */
+.sidebar-toggle {
+  display:inline-grid;
+  place-items:center;
+  width:44px;
+  height:44px;
+  border-radius:10px;
+  background: rgba(255,255,255,0.02);
+  cursor:pointer;
+  color:var(--text);
+  border:1px solid rgba(255,255,255,0.02);
+}
+
+/* End of stylesheet */

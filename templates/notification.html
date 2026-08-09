@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Notifications</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='register.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='notification.css') }}">
+</head>
+<body>
+  <div class="dashboard-wrapper">
+    <header class="dashboard-header">
+      <div class="header-left">
+        <h2>Notifications</h2>
+        <p class="subtitle">Your recent activity and alerts</p>
+      </div>
+      <div class="header-right">
+        <a href="{{ url_for('new_dash') }}" class="link">Back to dashboard</a>
+      </div>
+    </header>
+
+    <main class="dashboard-content" role="main">
+      <section class="notifications-panel">
+        <div class="notifications-card">
+          {% if notifications %}
+            <ul class="notifications-list">
+              {% for n in notifications %}
+                <li class="notification-item {% if not n.read %}unread{% endif %}" tabindex="0">
+                  <!-- Avatar / icon -->
+                  <div class="notif-avatar">
+                    <img src="{{ url_for('static', filename=n.avatar or 'default-avatar.png') }}"
+                         alt="{{ n.title }} avatar"
+                         loading="lazy" />
+                  </div>
+
+                  <!-- Content column (matches notifications.css .notif-content/.notif-title/.notif-body) -->
+                  <div class="notif-content">
+                    <p class="notif-title">{{ n.title }}</p>
+                    <p class="notif-body {% if n.message|length > 140 %}multiline{% endif %}">{{ n.message }}</p>
+                  </div>
+
+                  <!-- Meta / actions column -->
+                  <div class="notif-meta">
+                    <div class="notif-time" aria-hidden="true">
+                      {% if n.timestamp %}
+                        <time datetime="{{ n.timestamp.isoformat() }}">{{ n.timestamp_human }}</time>
+                      {% endif %}
+                    </div>
+
+                    <div class="notif-actions">
+                      <form action="{{ url_for('notifications', id=n.id) }}" method="post">
+                        
+                        {% if not n.read %}
+                          <button type="submit" class="btn-notif mark-btn">Mark read</button>
+                        {% else %}
+                          <span class="muted">Read</span>
+                        {% endif %}
+                      </form>
+                    </div>
+                  </div>
+                </li>
+              {% endfor %}
+            </ul>
+
+            <div class="list-actions" style="margin-top:12px; display:flex; gap:8px;">
+              <form action="{{ url_for('notifications') }}" method="post" style="display:inline">
+                
+                <button class="btn-notif btn-small">Mark all read</button>
+              </form>
+              <form action="{{ url_for('notifications') }}" method="post" style="display:inline">
+                
+                <button class="btn-notif btn-small btn-danger">Clear all</button>
+              </form>
+            </div>
+          {% else %}
+            <div class="notifications-empty" aria-live="polite">
+              <p class="big">No notifications</p>
+              <p class="muted">You're all caught up.</p>
+            </div>
+          {% endif %}
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

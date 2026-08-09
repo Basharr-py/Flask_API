@@ -1,0 +1,185 @@
+<!doctype html>  
+<html lang="en">  
+<head>  
+  <meta charset="utf-8" />  
+  <meta name="viewport" content="width=device-width,initial-scale=1" />  
+  <title>Live Chat — Support</title>  
+  <link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}">  
+  <link rel="stylesheet" href="{{ url_for('static', filename='chat.css') }}">  
+</head>  
+<body>  
+  <div class="dashboard-wrapper chat-wrapper">  
+    <header class="dashboard-header">  
+      <div class="header-left">  
+        <h2>Live Chat</h2>  
+        <p class="subtitle">Support & project conversations — server-driven</p>  
+      </div>  
+      <div class="header-right">  
+        <a href="{{ url_for('new_dash') }}" class="link">Back to dashboard</a>  
+      </div>  
+    </header>  
+
+    <main class="dashboard-content chat-content">  
+      <aside class="chat-sidebar">  
+        <div class="sidebar-top">  
+          <h3>Active Sessions</h3>  
+          <p class="muted">Select a conversation to open</p>  
+        </div>  
+
+        <ul class="session-list">  
+          <li class="session-item active">  
+            <img src="{{ url_for('static', filename='avatars/default-avatar.png') }}" alt="" class="sess-avatar">  
+            <div class="sess-meta">  
+              <div class="sess-title">Project Inquiry — Acme Co.</div>  
+              <div class="sess-sub muted">Last message • 2m ago</div>  
+            </div>  
+            <div class="sess-badge">3</div>  
+          </li>  
+
+          <li class="session-item">  
+            <img src="{{ url_for('static', filename='avatars/alex-johnson.png') }}" alt="" class="sess-avatar">  
+            <div class="sess-meta">  
+              <div class="sess-title">Billing Support</div>  
+              <div class="sess-sub muted">Agent replied • 1h ago</div>  
+            </div>  
+          </li>  
+
+          <li class="session-item">  
+            <img src="{{ url_for('static', filename='avatars/sarah-lee.png') }}" alt="" class="sess-avatar">  
+            <div class="sess-meta">  
+              <div class="sess-title">General Chat</div>  
+              <div class="sess-sub muted">No recent messages</div>  
+            </div>  
+          </li>  
+
+          <li class="session-item">  
+            <img src="{{ url_for('static', filename='avatars/mike-chen.png') }}" alt="" class="sess-avatar">  
+            <div class="sess-meta">  
+              <div class="sess-title">Feature Request Discussion</div>  
+              <div class="sess-sub muted">Replied • 3h ago</div>  
+            </div>  
+          </li>  
+        </ul>  
+
+        <div class="sidebar-footer">  
+          <a href="{{ url_for('profile') }}" class="btn-small">+ New Chat</a>  
+        </div>  
+      </aside>  
+
+      <section class="chat-main">  
+        <div class="chat-header">  
+          <div class="chat-title">  
+            <img src="{{ url_for('static', filename='avatars/default-avatar.png') }}" alt="" class="chat-header-avatar">  
+            <div>  
+              <div class="chat-name">Project Inquiry — Acme Co.</div>  
+              <div class="chat-status muted">🟢 Active • 2 participants</div>  
+            </div>  
+          </div>  
+          <div class="chat-actions">  
+            <a href="#" class="link">View details</a>  
+            <span class="sep">•</span>  
+            <a href="#" class="link">Close chat</a>  
+          </div>  
+        </div>
+                <div class="chat-messages">  
+          <div class="msg-day">Today • Sep 12</div>  
+
+          <div class="message message-other">  
+            <img src="{{ url_for('static', filename='avatars/alex-johnson.png') }}" alt="" class="msg-avatar">  
+            <div class="msg-bubble">  
+              <div class="msg-meta">  
+                <span class="msg-name">Alex Johnson</span>  
+                <span class="msg-time muted"> • 09:12</span>  
+              </div>  
+              <div class="msg-text">Hey — I reviewed the specs. The timeline looks good; can you confirm the budget?</div>  
+            </div>  
+          </div>  
+
+          <div class="message message-me">  
+            <div class="msg-bubble me">  
+              <div class="msg-meta"><span class="msg-name">You</span><span class="msg-time muted"> • 09:15</span></div>  
+              <div class="msg-text">Thanks — we can proceed at $8k. I'll send a formal proposal by EOD.</div>  
+            </div>  
+          </div>  
+
+          <div class="message message-system">  
+            <div class="sys-text">Alex Johnson joined the conversation</div>  
+          </div>  
+
+          <div class="message message-other">  
+            <img src="{{ url_for('static', filename='avatars/alex-johnson.png') }}" alt="" class="msg-avatar">  
+            <div class="msg-bubble">  
+              <div class="msg-meta">  
+                <span class="msg-name">Alex Johnson</span>  
+                <span class="msg-time muted"> • 09:18</span>  
+              </div>  
+              <div class="msg-text">Perfect! Looking forward to it. We'll review and get back to you with feedback within 24hrs.</div>  
+            </div>  
+          </div>  
+
+          <div class="message message-me">  
+            <div class="msg-bubble me">  
+              <div class="msg-meta"><span class="msg-name">You</span><span class="msg-time muted"> • 09:22</span></div>  
+              <div class="msg-text">Great. I've attached the proposal doc to this chat. Check the link below 👇</div>  
+            </div>  
+            <div class="msg-attachment">  
+              <div class="attachment-item">  
+                <span class="attach-icon">📄</span>  
+                <div class="attach-meta">  
+                  <div class="attach-name">Proposal_AcmeCo_2024.pdf</div>  
+                  <div class="attach-size muted">2.4 MB</div>  
+                </div>  
+              </div>  
+            </div>  
+          </div>  
+
+          <div class="message message-other">  
+            <img src="{{ url_for('static', filename='avatars/alex-johnson.png') }}" alt="" class="msg-avatar">  
+            <div class="msg-bubble">  
+              <div class="msg-meta">  
+                <span class="msg-name">Alex Johnson</span>  
+                <span class="msg-time muted"> • 09:25</span>  
+              </div>  
+              <div class="msg-text">Downloading now. One quick question — is the 30-day timeline flexible if we need to scale?</div>  
+            </div>  
+          </div>  
+
+          <div class="message message-me">  
+            <div class="msg-bubble me">  
+              <div class="msg-meta"><span class="msg-name">You</span><span class="msg-time muted"> • 09:28</span></div>  
+              <div class="msg-text">Absolutely. We can discuss milestones and adjust as needed. Let's sync on a call tomorrow?</div>  
+            </div>  
+          </div>  
+
+          <div class="message message-other">  
+            <img src="{{ url_for('static', filename='avatars/alex-johnson.png') }}" alt="" class="msg-avatar">  
+            <div class="msg-bubble">  
+                            <div class="msg-meta">
+                <span class="msg-name">Alex Johnson</span>
+                <span class="msg-time muted"> • 09:31</span>
+              </div>
+              <div class="msg-text">Sounds good — tomorrow works. Send me a calendar invite.</div>
+            </div>
+          </div>
+
+        </div> <!-- .chat-messages -->
+
+        <div class="chat-composer">
+          <form action="{{ url_for('send_message', session_id=session.id) }}" method="post" enctype="multipart/form-data" class="composer-form">
+            <label class="composer-attach">
+              <input type="file" name="attachment" class="hidden-file" accept="image/*,application/pdf">
+              <span class="attach-icon">➕</span>
+            </label>
+
+            <textarea name="message" rows="1" placeholder="Type a message..." class="composer-input"></textarea>
+
+            <button type="submit" class="composer-send">Send</button>
+          </form>
+
+          <div class="composer-hint muted">Press Enter to send (server will handle key events). Attachments saved via backend.</div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

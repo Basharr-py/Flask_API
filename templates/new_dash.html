@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Project X</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Using FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body> 
+    
+
+    <div class="container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="logo">
+                <h2>Basharr<span>UI</span></h2>
+                {% with message=get_flashed_messages() %}
+                {% if message %}
+                {% for m in message %}
+                <p>{{message}}</p>
+                {% endfor %}
+                {% endif %}
+                {% endwith%}
+            </div>
+            <ul class="menu">
+                <li class="active"><a href="#"><i class="fas fa-th-large"></i> Dashboard</a></li>
+                <li><a href="/profile"><i class="fas fa-wallet"></i> Profile</a></li>
+                <li><a href="/notifications"><i class="fas fa-cog"></i> Notifications </a></li>
+            </ul>
+            <div class="logout">
+                <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header>
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search data...">
+                </div>
+                <!-- New Action Container -->
+                <div class="header-actions">
+                    {% if current_user.username=="Bash999" %}
+                    <button class="btn-primary" onclick="openModal()">
+                        <i class="fas fa-plus"></i> ADD NEW COURSE
+                    </button>
+                    {% endif %}
+                    <div class="user-profile">
+                        <span>Welcome, <strong>{{ current_user.username }}</strong></span>
+                        <img src= "{{ current_user.avatar }}" alt="User">
+                    </div>
+                </div>
+            </header>
+
+            <section class="content-body">
+                <h1>Overview</h1>
+                
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-icon blue"><i class="fas fa-users"></i></div>
+                        <div class="card-info">
+                            <h3>300 LEVEL</h3>
+                            <p>First semester</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon green"><i class="fas fa-th-large"></i></div>
+                        <div class="card-info">
+                            <h3>TOTAL COURSES</h3>
+                            <p>10</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon orange"><i class="fas fa-wallet"></i></div>
+                        <div class="card-info">
+                            <h3>CREDIT LOADS</h3>
+                            <p>22</p>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <div class="data-section">
+    <div class="recent-activity">
+        <div class="header-flex">
+        
+            
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Course code </th>
+                                    <th>Status</th>
+                                    <th>Credit unit</th>
+                                    <th>Resources</th>
+                                </tr>
+                            </thead>
+                            <tbody position="relative">
+                               
+                                {% for doc in docs %}
+                                <tr>
+                                    
+                                    <td>{{ doc.course_code }}</td>
+                                    <td><span class="status Completed"> {{ doc.status }}</span></td>
+                                    <td>{{ doc.credit_unit }} units</td>
+                                    <td><button class="btn-add" onclick="openResources('{{ doc.id }}')"><i class="fas fa-th-large"></i> View resources</button> </td>
+                                    
+                                </tr>
+<div id="materials-{{ doc.id }}" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Available Resources</h2>
+            <span class="close-btn" onclick="closeResources('{{doc.id}}')">&times;</span>
+        </div>
+        {% if doc.courseMat %}
+            {% for m in doc.courseMat %}
+        
+                <a href="{{url_for('view_file', filename=m.filename)}}"><p>{{m.id}}:  {{m.filename}}</p></a>
+                 
+                
+                
+        
+            {% endfor %}
+            
+        {% else %}
+            <p>No materials uploaded yet</p>
+            
+        {% endif %}
+        <p> </p>
+                <p> </p>
+                <p> </p>
+            <button onclick="Add()" class="btn-submit">Add PDF</button>
+        
+    
+    </div>
+</div> {% endfor %}
+                                
+                                {% block content %}{% endblock %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <!-- Add this Modal at the very bottom of your <body> -->
+
+
+        
+<div id="transactionModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>New Course</h2>
+            <span class="close-btn" onclick="closeModal('transactionModal')">&times;</span>
+        </div>
+        <form action="{{url_for('upload_route')}}" method="POST" enctype="multipart/form-data">
+            {{form.hidden_tag()}}
+            <div class="input-group">
+                <label>Course code</label>
+                <input type="text" name="course_code" placeholder="e.g. CSC111" required>
+                {% for error in form.course_code.errors %}
+                <p>{{error}}</p>
+                {% endfor %}
+            </div>
+            <div class="input-group">
+                <label>Credit Unit</label>
+                <input type="number" step="1" name="credit_unit" placeholder="0" required>
+                {% for error in form.credit_unit.errors %}
+                <p>{{error}}</p>
+                {% endfor %}
+            </div>
+
+           
+            <div class="input-group">
+                <label>Status</label>
+                <select name="status">
+                    <option value="Required">Required</option>
+                    <option value="Core">Core</option>
+                    <option value="Elective">Elective</option>
+                </select>
+            </div>
+            <button type="submit" class="btn-submit">Save Data</button>
+        </form>
+    </div>
+</div>
+
+<div id="materials" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Add Course Materials</h2>
+            <span class="close-btn" onclick="closeAdd('materials')">&times;</span>
+        </div>
+        <form action="{{url_for('addmaterial')}}" method="POST" enctype="multipart/form-data">
+            {{form.hidden_tag()}}
+            
+            
+
+            <div class="input-group">
+                <label>Upload Course PDF</label>
+                <input type="file" accept=".pdf" name="material">
+                {% for error in form.material.errors %}
+                <p>{{error}}</p>
+                {% endfor %}
+            </div>
+
+            <div class="input-group">
+                <label>Course ID</label>
+                <input type="number" step="1" name="courseID" placeholder="0" required>
+                
+            </div>
+
+        
+            <button type="submit" class="btn-submit">Save Data</button>
+        </form>
+    </div>
+</div>
+
+        
+
+<!-- Simple Script for Modal Toggling -->
+<script>
+    function openModal() {
+        document.getElementById("transactionModal").style.display = "flex";
+    }
+    function closeModal() {
+        document.getElementById("transactionModal").style.display = "none";
+    }
+
+    function Add() {
+        document.getElementById("materials").style.display = "flex";
+    }
+    function closeAdd() {
+        document.getElementById("materials").style.display = "none";
+    }
+
+    // Close modal if clicking outside the box
+    // window.onclick = function(event) {
+    //     let modal = document.getElementById("transactionModal");
+    //     if (event.target == modal) { closeModal(); }
+    // }
+
+    function openResources(docID) {
+        document.getElementById("materials-" + docID).style.display = "flex";
+    }
+    function closeResources(docID) {
+        document.getElementById("materials-" + docID).style.display = "none";
+    }
+    // Close modal if clicking outside the box
+    window.onclick = function(event) {
+        let modal = document.getElementById();
+        if (event.target == modal) { closeModal(modal2); }
+    }
+
+    
+
+</script>
+<script>
+    function toggleSidebar() {
+        document.getElementById("sidebar").classList.toggle("collapsed");
+    }
+</script>
+</body>
+</html>

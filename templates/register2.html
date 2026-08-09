@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Create account</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='register2.css') }}" />
+</head>
+<body>
+  
+  <div class="page">
+    <div class="background" aria-hidden="true">
+      <div class="shape left"></div>
+      <div class="shape right"></div>
+    </div>
+
+    <div class="card" role="region" aria-labelledby="register-heading">
+      <!-- <div class="side" aria-hidden="true">
+        
+      </div> -->
+
+      <div class="form-wrap">
+        {% block content %}{% endblock %}
+        <h1 text-align="center">Welcome!</h1>
+        <!-- <p>Create an account to save your progress, sync across devices, and access exclusive features. Fast signup, secure storage, and a delightful experience.</p> -->
+        <form method="POST" action="/register" autocomplete="on" novalidate> 
+          {{ form.hidden_tag() }}
+          <h3 id="register-heading">Create Account</h3>
+
+          <label for="name">Full name</label>
+          <div class="input-row">
+            <input id="name" name="name" type="text" placeholder="Basharr Azeez" required />
+          <div id="match-help" class="help text-muted" aria-live="polite">
+            {% for errors in form.name.errors %}
+              [{{ errors }}]
+            {% endfor %}</div>
+          </div>
+
+          <label for="email">Email</label>
+          <div class="input-row">
+            <input id="email" name="email" type="email" placeholder="you@example.com" required />
+            <div class="help text-muted">We'll send a confirmation email.</div>
+            <div id="match-help" class="help text-muted" aria-live="polite">
+            {% for errors in form.email.errors %}
+              [{{ errors }}]
+            {% endfor %}</div>
+          </div>
+
+          <label for="username">Username</label>
+          <div class="input-row">
+            <input id="username" name="username" type="text" placeholder="username" required />
+            <div id="uname-help" class="help text-muted">Use 3–20 characters, letters and numbers only.</div>
+            <div id="match-help" class="help text-muted" aria-live="polite">
+            {% for errors in form.username.errors %}
+              [{{ errors }}]
+            {% endfor %}</div>
+          </div>
+
+          <label for="password">Password</label>
+          <div class="input-row" style="position:relative;">
+            <input id="password" name="password" type="password" placeholder="Enter password" required aria-describedby="pwd-help" />
+            <button type="button" class="pwd-toggle" id="togglePwd" aria-controls="password" aria-pressed="false">Show</button>
+            <div id="pwd-help" class="help text-muted">At least 8 characters, include a number and a symbol.</div>
+            <div id="match-help" class="help text-muted" aria-live="polite">
+            {% for errors in form.password.errors %}
+              [{{ errors }}]
+            {% endfor %}</div>
+          </div>
+
+          <label for="password2">Confirm password</label>
+          <div class="input-row">
+            <input id="password2" name="password2" type="password" placeholder="Repeat password" required />
+            <div id="match-help" class="help text-muted" aria-live="polite">
+            {% for errors in form.password2.errors %}
+              [{{ errors }}]
+            {% endfor %}</div>
+          </div>
+
+          <div class="checkbox-row" aria-hidden="false">
+            <input id="terms" name="terms" type="checkbox" required />
+            <label for="terms" style="margin:0; font-weight:500;">I agree to the <a href="#" style="color:#fff; text-decoration:underline;">terms & privacy</a></label>
+          </div>
+
+          <button class="btn" type="submit" id="submit">Create account</button>
+
+          <div class="social" role="group" aria-label="Social signup options">
+            <div class="item" id="googleSign">Google</div>
+            <div class="item" id="githubSign">GitHub</div>
+          </div>
+
+          <div class="form-footer">
+            <span class="text-muted">Already have an account?</span>
+            <a href="/login" class="small-link">Sign in</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Password toggle
+    const pwd = document.getElementById('password');
+    const toggle = document.getElementById('togglePwd');
+    toggle.addEventListener('click', () => {
+      const isPwd = pwd.type === 'password';
+      pwd.type = isPwd ? 'text' : 'password';
+      toggle.textContent = isPwd ? 'Hide' : 'Show';
+      toggle.setAttribute('aria-pressed', String(isPwd));
+    });
+    // Demo hooks for social buttons
+    
+     //document.getElementById('submit').addEventListener('click', () => alert('Account validating...'));
+    
+    document.getElementById('googleSign').addEventListener('click', () => alert('Sign up with Google (demo)'));
+    document.getElementById('githubSign').addEventListener('click', () => alert('Sign up with GitHub (demo)'));
+  </script>
+  
+
+
+  
+</body>
+</html>

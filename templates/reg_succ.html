@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Registration Successful</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='register2.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+    <div class="page">
+    <div class="background" aria-hidden="true">
+      <div class="shape left"></div>
+      <div class="shape right"></div>
+    </div>
+
+    <div class="login-container" >
+        <div class="form-wrap">
+            <h2>Account created successfully</h2>
+            <p>You will be redirected to the login page in <span id="countdown" style="color: rgb(0, 60, 255);" > <b>5</b> </span> seconds</p>
+        </div>
+    </div>
+<script>
+    let seconds = 5;
+    const countdown = document.getElementById('countdown');
+
+    const timer = setInterval(()=>{
+        seconds--;
+        countdown.textContent = seconds;
+
+        if (seconds===0) {
+            clearInterval(timer);
+            window.location.href = "{{ url_for('login') }}";
+        }
+    }, 1000);
+</script>
+</body>
