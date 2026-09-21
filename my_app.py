@@ -24,7 +24,7 @@ def make_shell_context():
     return {'sa': sa, 'so': so, 'db': db, 'User': User, 'Post': Post}
 
 
-
+@app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     session.pop('registered', None)
