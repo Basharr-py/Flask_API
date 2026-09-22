@@ -34,4 +34,5 @@ jobs:
       - name: Build Docker image
         run: |
           docker build -t flask_app .
+          docker tag flask_app:latest flask_app:v1.0.0
 
