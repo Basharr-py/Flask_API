@@ -6,7 +6,7 @@ WORKDIR /backend
 COPY requirements.txt .
 
 # Install dependencies into a temporary directory
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirement.txt
 
 
 # Stage 2: Runtime image
