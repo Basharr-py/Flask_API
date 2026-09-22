@@ -3,7 +3,10 @@ env:
   SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   test:
