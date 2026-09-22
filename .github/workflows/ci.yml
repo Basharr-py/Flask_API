@@ -35,10 +35,14 @@ jobs:
         run: |
           pytest
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver: docker-container
+
       - name: Build Docker image
         uses: docker/build-push-action@v6
         with:
-          driver: docker-container
           context: .
           push: false
           tags: flask_app:latest
