@@ -6,7 +6,7 @@ WORKDIR /backend
 COPY requirement.txt .
 
 # Install dependencies into a temporary directory
-RUN pip install --no-cache-dir -r requirement.txt
+RUN pip install --no-cache-dir --prefix=/install -r requirement.txt
 
 
 # Stage 2: Runtime image
@@ -28,4 +28,4 @@ RUN chown -R appuser:appuser /backend
 
 USER appuser
 
-CMD ["flask", "--app", "my_app.py" "run", "--host=0.0.0.0"]
+CMD ["flask", "--app", "my_app.py", "run", "--host=0.0.0.0"]
