@@ -1,0 +1,22 @@
+name: Multi Job Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  first:
+    runs-on: ubuntu-latest
+    steps:
+      - name: First job
+        run: |
+          echo "This is job ONE"
+          touch hello.txt
+          ls
+
+  second:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Second job
+        run: |
+          echo "This is job TWO"
+          ls
