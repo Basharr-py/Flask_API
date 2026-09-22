@@ -16,6 +16,11 @@ jobs:
       - name: Say hello
         run: echo "GitHub Actions is working!"
 
+  setup:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -23,6 +28,11 @@ jobs:
           cache: 'pip'
           cache-dependency-path: requirement.txt
 
+  dependencies:
+    runs-on: ubuntu-latest
+    needs: setup
+
+    steps:
       - name: Install dependencies
         run: |
           pip install -r requirement.txt
@@ -30,4 +40,13 @@ jobs:
       - name: Run tests
         run: |
           pytest
+
+  build:
+    runs-on: ubuntu-latest
+    needs: setup
+
+    steps:
+      - name: Build Docker image
+        run: |
+          docker build -t flask_app .
 
