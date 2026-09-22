@@ -1,12 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file
 from config import Config
-from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_moment import Moment
-from form import LoginForm, RegistrationForm, ProfileForm, CourseForm, AddMaterial, EditProfileForm
-from trans_fom import Trans
+from form import LoginForm, RegistrationForm, CourseForm, AddMaterial, EditProfileForm
 from models import db, User, sa, so, Post, login, Files, datetime, timezone, Materials
-from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from flask_login import login_user, logout_user, login_required, current_user
 from urllib.parse import urlsplit
 import os
 
@@ -128,7 +126,7 @@ def upload_route():
         print('uploaded succesfully')
         docs = Files.query.all()
         return redirect(url_for('new_dash'))
-    return render_template('upload.html', form=form, username=username, docs=docs)
+    return render_template('upload.html', form=form, docs=docs)
 
 @app.route('/addmaterial', methods=['GET', 'POST'])
 @login_required
@@ -164,7 +162,7 @@ def addmaterial():
 @login_required
 def view_file(filename):
     print(filename)
-    username ='admin'
+    # username ='admin'
     docs = Materials.query.filter_by(filename=filename).first()
     return send_file(docs.filepath)
 
@@ -175,7 +173,7 @@ def new_dash():
     username ='admin'
     docs = Files.query.all()
     files = Files.query.all()
-    x = '\4'
+    
     
     return render_template('new_dash.html', username=username, form=form, files=files, docs=docs)
 
