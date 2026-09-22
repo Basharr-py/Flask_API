@@ -3,7 +3,7 @@ FROM python:3.12-slim AS builder
 
 WORKDIR /backend
 
-COPY requirements.txt .
+COPY requirement.txt .
 
 # Install dependencies into a temporary directory
 RUN pip install --no-cache-dir -r requirement.txt
