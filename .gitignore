@@ -3,3 +3,4 @@ app.db
 ragnar2
 .flaskenv
 ragnar
+dump.sql
