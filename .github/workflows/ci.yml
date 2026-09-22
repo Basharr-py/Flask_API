@@ -3,7 +3,9 @@ env:
   SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [ main ]
+  
 
 jobs:
   test:
@@ -52,7 +54,7 @@ jobs:
       - name: Scan Docker image for vulnerabilities
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: flask_app:latest
+          image-ref: flask_app
           format: table
           severity: CRITICAL
           exit-code: 1
