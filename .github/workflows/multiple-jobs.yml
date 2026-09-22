@@ -7,16 +7,24 @@ jobs:
   first:
     runs-on: ubuntu-latest
     steps:
-      - name: First job
+      - name: Create file
         run: |
-          echo "This is job ONE"
-          touch hello.txt
-          ls
+          echo "This is job ONE" > hello.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: hello-artifact
+          path: hello.txt
 
   second:
+    needs: first
     runs-on: ubuntu-latest
     steps:
       - name: Second job
-        run: |
-          echo "This is job TWO"
-          ls
+        uses: actions/download-artifact@v4
+        with:
+          name: hello-artifact
+
+      - name: Read file
+        run: cat hello.txt
