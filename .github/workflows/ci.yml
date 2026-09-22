@@ -1,8 +1,10 @@
 name: For Flask Project
+env:
+  SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
 on:
   workflow_dispatch:
-  
+
 jobs:
   test:
     runs-on: ubuntu-latest
