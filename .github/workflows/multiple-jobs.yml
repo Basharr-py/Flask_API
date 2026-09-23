@@ -28,3 +28,23 @@ jobs:
 
       - name: Read file
         run: cat hello.txt
+
+  build:
+    runs-on: ubuntu-latest
+
+    outputs:
+      image_tag: ${{ steps.tag.outputs.image_tag }}
+
+    steps:
+      - name: Set image tag
+        id: tag
+        run: echo "image_tag=v1.0.1" >> "$GITHUB_OUTPUT"
+
+  scan:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Show image tag
+        run: echo "Scanning ${{ needs.build.outputs.image_tag }}"
+

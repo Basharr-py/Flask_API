@@ -1,0 +1,23 @@
+name: Deploy Ansible 
+
+on: 
+  workflow_dispatch:
+
+jobs:  
+  deploy: 
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Get the code
+        uses: action/checkout@v4
+
+      - name: Set up Python
+        uses: action/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install Ansible
+        run: pip install ansible
+
+      - name: Check ansible 
+        run: ansible --version
