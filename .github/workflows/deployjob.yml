@@ -3,13 +3,22 @@ name: Deploy Ansible
 on: 
   workflow_dispatch:
 
-jobs:  
-  deploy: 
-    runs-on: ubuntu-latest
-    steps: 
-      - name: Get the code
-        uses: actions/checkout@v4
+permissions:
+  id-token: write
+  contents: read
 
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure Github OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: 
+          aws-region: us-east-1
+  
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
