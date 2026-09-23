@@ -44,7 +44,6 @@ jobs:
 
       - name: Install Ansible AWS collection
         run: ansible-galaxy collection install amazon.aws
-        
 
       - name: Install Session Manager plugin
         run: |
