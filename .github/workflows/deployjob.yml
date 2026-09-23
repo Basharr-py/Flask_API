@@ -1,7 +1,9 @@
 name: Deploy Ansible 
 
 on: 
-  workflow_dispatch:
+  push:
+    branches: [ main ]
+
 
 permissions:
   id-token: write
@@ -10,6 +12,7 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -18,9 +21,13 @@ jobs:
         with:
           role-to-assume: ${{ secrets.IAM_ROLE }}
           aws-region: us-east-1
+          audience: sts.amazonaws.com
 
       - name: Verify AWS identity
         run: aws sts get-caller-identity
+
+      - name: Check SSM
+        run: aws ssm describe-instance-information
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -32,5 +39,5 @@ jobs:
       - name: Install Ansible
         run: pip install ansible
 
-      - name: Check ansible 
+      - name: Check ansible
         run: ansible --version
