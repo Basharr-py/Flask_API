@@ -16,6 +16,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Checkout Ansible repository
+        uses: actions/checkout@v4
+        with:
+          repository: Basharr-py/Ansible-Config
+          path: ansible-lab
+
       - name: Configure Github OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -45,6 +51,7 @@ jobs:
             -o session-manager-plugin.deb
           sudo dpkg -i session-manager-plugin.deb
 
-
-      - name: Check ansible
-        run: ansible --version
+      - name: Test private servers
+        working-directory: ansible-lab
+        run: |
+          ansible flask_private -i inventories/for_flask -m ping
