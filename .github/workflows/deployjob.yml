@@ -40,7 +40,7 @@ jobs:
           cache-dependency-path: requirement.txt
 
       - name: Install Ansible
-        run: pip install ansible
+        run: pip install ansible boto3 botocore
 
       - name: Install Ansible AWS collection
         run: ansible-galaxy collection install amazon.aws
