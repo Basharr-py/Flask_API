@@ -37,11 +37,10 @@ jobs:
 
       - name: Set up Python
         uses: actions/setup-python@v5
-        working-directory: Flask_API
         with:
           python-version: '3.12'
           cache: 'pip'
-          cache-dependency-path: requirement.txt
+          cache-dependency-path: Flask_API/requirement.txt
 
       - name: Install Ansible
         run: pip install ansible boto3 botocore
