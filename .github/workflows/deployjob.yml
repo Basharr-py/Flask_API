@@ -66,16 +66,5 @@ jobs:
         working-directory: ansible-lab
         run: |
           echo "$ANSIBLE_VAULT_PASSWORD" > ansible-vault.pass
-          echo "Current directory:"
-          pwd
-
-          echo "Files:"
-          ls -la
-
-          echo "Vault password file:"
-          ls -l ansible-vault.pass
-
-          echo "Ansible vault configuration:"
-          ansible-config dump --only-changed | grep -i vault || true
-          export ANSIBLE_VAULT_PASSWORD_FILE=~/ansible-lab/ansible-vault.pass
+          # export ANSIBLE_VAULT_PASSWORD_FILE=./ansible-vault.pass
           ansible-playbook -i inventories/for_flask flask-gh.yml
