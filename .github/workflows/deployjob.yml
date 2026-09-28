@@ -58,6 +58,7 @@ jobs:
         working-directory: ansible-lab
         run: |
           ansible flask_private -i inventories/for_flask -m ping
+          touch ansible-vault.pass
           cat ${{ secrets.ANSIBLE_VAULT_PASSWORD }} > ansible-vault.pass
           
       - name: Run Ansible playbook
