@@ -42,7 +42,7 @@ jobs:
         with:
           python-version: '3.12'
           cache: 'pip'
-          cache-dependency-path: Flask_API/requirement.txt
+          cache-dependency-path: Flask_API/ansible-requirements.txt
 
       - name: Install Ansible
         run: pip install ansible boto3 botocore
