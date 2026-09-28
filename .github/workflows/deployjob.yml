@@ -1,4 +1,6 @@
 name: Deploy Ansible 
+env:
+  SECRET_KEY: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
 
 on: 
   push:
@@ -63,6 +65,6 @@ jobs:
       - name: Run Ansible playbook
         working-directory: ansible-lab
         run: |
-          printf '%s' '${{ secrets.ANSIBLE_VAULT_PASSWORD }}' > ansible-vault.pass
+          printf '%s' "$ANSIBLE_VAULT_PASSWORD" > ansible-vault.pass
           export ANSIBLE_VAULT_PASSWORD_FILE=~/ansible-lab/ansible-vault.pass
           ansible-playbook -i inventories/for_flask flask-gh.yml
