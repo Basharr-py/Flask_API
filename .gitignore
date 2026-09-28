@@ -4,3 +4,5 @@ ragnar2
 .flaskenv
 ragnar
 dump.sql
+db.dump
+.env
