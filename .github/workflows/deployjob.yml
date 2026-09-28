@@ -66,5 +66,10 @@ jobs:
         working-directory: ansible-lab
         run: |
           echo "$ANSIBLE_VAULT_PASSWORD" > ansible-vault.pass
-          
+          ansible flask_private \
+          -i inventories/for_flask \
+          -m setup \
+          --become \
+          --timeout 60 \
+          --vault-password-file ./ansible-vault.pass
           ansible-playbook -i inventories/for_flask flask-gh.yml --vault-password-file ./ansible-vault.pass
