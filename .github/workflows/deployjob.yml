@@ -37,6 +37,7 @@ jobs:
 
       - name: Set up Python
         uses: actions/setup-python@v5
+        working-directory: Flask_API
         with:
           python-version: '3.12'
           cache: 'pip'
