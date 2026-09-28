@@ -63,4 +63,4 @@ jobs:
       - name: Run Ansible playbook
         working-directory: ansible-lab
         run: |
-          ansible-playbook -i inventories/for_flask deploy-with-gh.yml
+          ansible-playbook -i inventories/for_flask flask-gh.yml
