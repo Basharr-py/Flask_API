@@ -66,7 +66,7 @@ jobs:
         working-directory: ansible-lab
         run: |
           echo "$ANSIBLE_VAULT_PASSWORD" > ansible-vault.pass
-          ansible flask_private \
+          ansible flask_private -vvvv \
           -i inventories/for_flask \
           -m setup \
           --become \
