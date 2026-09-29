@@ -72,4 +72,4 @@ jobs:
           --become \
           --timeout 60 \
           --vault-password-file ./ansible-vault.pass
-          ansible-playbook -i inventories/for_flask flask-gh.yml --vault-password-file ./ansible-vault.pass
+          
