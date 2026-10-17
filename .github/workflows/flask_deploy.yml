@@ -20,7 +20,7 @@ jobs:
       - name: Checkout Ansible repository
         uses: actions/checkout@v4
         with:
-          repository: Basharr-py/ansible-lab
+          repository: Basharr-py/Ansible-Config
           path: ansible-lab
 
       - name: Install Ansible
