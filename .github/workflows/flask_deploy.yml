@@ -1,0 +1,66 @@
+
+name: Deploy to Public EC2 via Ansible SSH
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Flask API
+        uses: actions/checkout@v4
+        with:
+          path: Flask_API
+
+      - name: Checkout Ansible repository
+        uses: actions/checkout@v4
+        with:
+          repository: Basharr-py/ansible-lab
+          path: ansible-lab
+
+      - name: Install Ansible
+        run: |
+          python -m pip install ansible
+
+      - name: Configure SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          SSH_HOST_KEY: ${{ secrets.EC2_SSH_HOST_KEY }}
+        run: |
+          install -d -m 700 ~/.ssh
+
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/ec2_key.pem
+          chmod 600 ~/.ssh/ec2_key.pem
+
+          printf '%s\n' "$SSH_HOST_KEY" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Test Ansible SSH connection
+        working-directory: ansible-lab
+        env:
+          ANSIBLE_PRIVATE_KEY_FILE: /home/runner/.ssh/ec2_key.pem
+          ANSIBLE_HOST_KEY_CHECKING: "True"
+        run: |
+          ansible flask-web \
+            -i inventories/for_flask \
+            -m ping
+
+      - name: Run Ansible deployment
+        working-directory: ansible-lab
+        env:
+          ANSIBLE_PRIVATE_KEY_FILE: /home/runner/.ssh/ec2_key.pem
+          ANSIBLE_HOST_KEY_CHECKING: "True"
+        run: |
+          ansible-playbook \
+            -i inventories/for_flask \
+            flask-gh.yml
+
+      - name: Remove temporary SSH credentials
+        if: always()
+        run: |
+          rm -f ~/.ssh/ec2_key.pem
