@@ -16,7 +16,7 @@ services:
       - .env
     environment:
       # SQLAlchemy will pick this up instead of falling back to SQLite
-      DATABASE_URL: postgresql://${POSTGRES_USER}:bar@db:${POSTGRES_PORT}/${POSTGRES_DB}
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:${POSTGRES_PORT}/${POSTGRES_DB}
     depends_on:
       - db
 
