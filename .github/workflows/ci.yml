@@ -3,8 +3,7 @@ env:
   SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
 on:
-  push:
-    branches: [ main ]
+  workflow_dispatch:
   
 
 jobs:

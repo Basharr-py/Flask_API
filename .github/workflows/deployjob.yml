@@ -3,8 +3,7 @@ env:
   ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
 
 on: 
-  push:
-    branches: [ main ]
+  workflow_dispatch:
 
 
 permissions:
