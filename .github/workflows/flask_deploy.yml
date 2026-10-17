@@ -41,9 +41,14 @@ jobs:
           printf '%s\n' "$SSH_HOST_KEY" > ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
 
-          printf '%s\n' "$ANSIBLE_VAULT_PASSWORD" > ~/ansible-vault.pass
-          chmod 600 ~/ansible-vault.pass
-
+      - name: Restore Ansible Vault password file
+        env:
+          VAULT_FILE_B64: ${{ secrets.ANSIBLE_VAULT_FILE_B64 }}
+        run: |
+          umask 077
+          printf '%s' "$VAULT_FILE_B64" | base64 --decode > "$HOME/ansible-vault.pass"
+          chmod 600 "$HOME/ansible-vault.pass"
+      
       - name: Test Ansible SSH connection
         working-directory: ansible-lab
         env:
@@ -59,7 +64,7 @@ jobs:
         env:
           ANSIBLE_PRIVATE_KEY_FILE: /home/runner/.ssh/ec2_key.pem
           ANSIBLE_HOST_KEY_CHECKING: "True"
-          ANSIBLE_VAULT_PASSWORD_FILE: /home/runner/ansible-vault.pass
+          ANSIBLE_VAULT_PASSWORD_FILE: $HOME/ansible-vault.pass
         run: |
           ansible-playbook \
             -i inventories/for_flask \
