@@ -66,8 +66,9 @@ jobs:
           ANSIBLE_HOST_KEY_CHECKING: "True"
           ANSIBLE_VAULT_PASSWORD_FILE: $HOME/ansible-vault.pass
         run: |
-          ansible-playbook flask_web \
+          ansible-playbook \
             -i inventories/for_flask \
+            --limit f_public_server1 \
             flask-gh.yml
 
       - name: Remove temporary SSH credentials
