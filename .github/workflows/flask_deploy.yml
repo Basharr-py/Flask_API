@@ -47,7 +47,7 @@ jobs:
           ANSIBLE_PRIVATE_KEY_FILE: /home/runner/.ssh/ec2_key.pem
           ANSIBLE_HOST_KEY_CHECKING: "True"
         run: |
-          ansible flask-web \
+          ansible flask_web \
             -i inventories/for_flask \
             -m ping
 
