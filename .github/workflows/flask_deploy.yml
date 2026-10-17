@@ -41,7 +41,8 @@ jobs:
           printf '%s\n' "$SSH_HOST_KEY" > ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
 
-          echo "$ANSIBLE_VAULT_PASSWORD" > ~/ansible-vault.pass
+          printf '%s\n' "$ANSIBLE_VAULT_PASSWORD" > ~/ansible-vault.pass
+          chmod 600 ~/ansible-vault.pass
 
       - name: Test Ansible SSH connection
         working-directory: ansible-lab
