@@ -88,6 +88,7 @@ jobs:
             -i inventories/for_flask \
             --limit f_public_server1 \
             -e "local_db_dump=$RUNNER_TEMP/db-backup/db.dump" \
+            --tags restore_db \
             flask-gh.yml
 
       - name: Remove temporary SSH credentials
