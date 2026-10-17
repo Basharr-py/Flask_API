@@ -7,6 +7,8 @@ on:
 
 permissions:
   contents: read
+  id-token: write
+
 
 jobs:
   deploy:
@@ -41,6 +43,22 @@ jobs:
           printf '%s\n' "$SSH_HOST_KEY" > ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
 
+      - name: Configure AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.IAM_ROLE }}
+          aws-region: us-east-1
+
+      - name: Download PostgreSQL backup from S3
+        run: |
+          mkdir -p "$RUNNER_TEMP/db-backup"
+
+          aws s3 cp \
+            s3://basharr-ansible-ssm-380142015153/database-backups/db.dump \
+            "$RUNNER_TEMP/db-backup/db.dump"
+
+          test -s "$RUNNER_TEMP/db-backup/db.dump"
+
       - name: Restore Ansible Vault password file
         env:
           VAULT_FILE_B64: ${{ secrets.ANSIBLE_VAULT_FILE_B64 }}
@@ -69,9 +87,15 @@ jobs:
           ansible-playbook \
             -i inventories/for_flask \
             --limit f_public_server1 \
+            -e "local_db_dump=$RUNNER_TEMP/db-backup/db.dump" \
             flask-gh.yml
 
       - name: Remove temporary SSH credentials
         if: always()
         run: |
           rm -f ~/.ssh/ec2_key.pem
+
+      - name: Remove downloaded backup
+        if: always()
+        run: |
+          rm -f "$RUNNER_TEMP/db-backup/db.dump"

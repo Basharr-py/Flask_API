@@ -7,6 +7,21 @@ jobs:
   first:
     runs-on: ubuntu-latest
     steps:
+
+      - name: Verify AWS access and download database backup
+        run: |
+          aws sts get-caller-identity
+
+          mkdir -p "$RUNNER_TEMP/db-backup"
+
+          aws s3 cp \
+            s3://basharr-ansible-ssm-380142015153/database-backups/db.dump \
+            "$RUNNER_TEMP/db-backup/db.dump"
+
+          test -s "$RUNNER_TEMP/db-backup/db.dump"
+
+          echo "Database backup downloaded successfully"
+
       - name: Create file
         run: |
           echo "This is job ONE" > hello.txt
