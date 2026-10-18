@@ -11,8 +11,6 @@ services:
 
     container_name: nginx-cont
     image: nginx:alpine
-    networks:
-        - frontend
     depends_on:
         db:
             condition: service_healthy
