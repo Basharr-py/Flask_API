@@ -1,5 +1,8 @@
 
 name: Deploy to Public EC2 via Ansible SSH
+env:
+  SECRET_KEY: ${{ secrets.SECRET_KEY }}
+
 
 on:
   push:
