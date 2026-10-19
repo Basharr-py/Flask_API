@@ -19,11 +19,11 @@ services:
 
 
   web:
-    image: basharr99/flask_api:1.0.1
+    image: basharr99/flask_app:s3_injected
     container_name: flask_app
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      test: ["CMD", "curl", "-f", "http://localhost:5000/"]
       interval: 100s
       timeout: 5s
       retries: 3
