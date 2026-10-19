@@ -63,7 +63,7 @@
                     <div class="card">
                         <div class="card-icon blue"><i class="fas fa-users"></i></div>
                         <div class="card-info">
-                            <h3>300 LEVEL</h3>
+                            <h3>400 LEVEL</h3>
                             <p>First semester</p>
                         </div>
                     </div>
@@ -132,7 +132,10 @@
         <p> </p>
                 <p> </p>
                 <p> </p>
+                {% if current_user.username=="Bash999" %}
             <button onclick="Add()" class="btn-submit">Add PDF</button>
+            
+            {% endif %}
         
     
     </div>
