@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file
+from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file, abort
 from config import Config
 from flask_migrate import Migrate
 from flask_moment import Moment
@@ -8,6 +8,20 @@ from flask_login import login_user, logout_user, login_required, current_user
 from urllib.parse import urlsplit
 import os
 
+import uuid
+import boto3
+
+
+from botocore.exceptions import BotoCoreError, ClientError
+from werkzeug.utils import secure_filename
+
+s3 = boto3.client(
+    "s3",
+    region_name=os.getenv("AWS_REGION", "us-east-1")
+)
+
+S3_BUCKET = os.environ["S3_MATERIALS_BUCKET"]
+
 app = Flask(__name__)
 app.config.from_object(Config)
 db.init_app(app)
@@ -16,10 +30,47 @@ moment = Moment(app)
 login.init_app(app)
 login.login_view = 'login'
 app.config['UPLOAD_FOLDER'] = 'uploads'
+app.config["MAX_CONTENT_LENGTH"] = 20 * 1024 * 1024
+
+MAX_PDF_SIZE = 20 * 1024 * 1024
+
+
+def validate_pdf(file):
+    filename = secure_filename(file.filename or "")
+
+    if not filename or not filename.lower().endswith(".pdf"):
+        return False, "Only PDF files are allowed."
+
+    # Check the file's actual size
+    file.stream.seek(0, 2)
+    file_size = file.stream.tell()
+    file.stream.seek(0)
+
+    if file_size == 0:
+        return False, "The PDF file is empty."
+
+    if file_size > MAX_PDF_SIZE:
+        return False, "PDF files must not exceed 10 MB."
+
+    # Check the PDF file signature
+    signature = file.stream.read(5)
+    file.stream.seek(0)
+
+    if signature != b"%PDF-":
+        return False, "Invalid PDF file."
+
+    return True, filename
 
 @app.shell_context_processor
 def make_shell_context():
     return {'sa': sa, 'so': so, 'db': db, 'User': User, 'Post': Post}
+
+from werkzeug.exceptions import RequestEntityTooLarge
+
+@app.errorhandler(RequestEntityTooLarge)
+def handle_large_file(error):
+    flash("File is too large. Maximum upload size is 10 MB.", "error")
+    return redirect(url_for("new_dash")), 303
 
 
 @app.route('/')
@@ -131,40 +182,95 @@ def upload_route():
 @app.route('/addmaterial', methods=['GET', 'POST'])
 @login_required
 def addmaterial():
+    
     form = AddMaterial()
+
     if form.validate_on_submit():
-        print('Material uploaded')
         file = form.material.data
-        filename = f"{file.filename}"
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        os.makedirs("uploads", exist_ok=True)
-        file.save(filepath)
-        # file = Files.query.order_by(Files.id.desc()).first()
-        # c_id=file.id
-        # c_id += 1
-        
 
+        valid, result = validate_pdf(file)
 
-        mats = Materials(
-            filename=filename,
-            filepath=filepath,
-            c_id=form.courseID.data
-            
+        if not valid:
+            flash(result, "error")
+            return redirect(url_for("new_dash"))
+
+        filename = result
+        course_id = form.courseID.data
+
+        object_key = (
+            f"materials/{course_id}/"
+            f"{uuid.uuid4().hex}-{filename}"
         )
-        db.session.add(mats)
-        db.session.commit()
-        flash('Material uploaded successfully')
-        print('Material uploaded successfully')
-        return redirect(url_for('new_dash'))
-    return render_template('newdash.html', form=form)
 
-@app.route('/view/<filename>')
+        try:
+            s3.upload_fileobj(
+                file.stream,
+                S3_BUCKET,
+                object_key,
+                ExtraArgs={
+                    "ContentType": "application/pdf",
+                    "ContentDisposition": "inline"
+                }
+            )
+
+            mats = Materials(
+                filename=filename,
+                filepath=object_key,
+                c_id=course_id
+            )
+
+            db.session.add(mats)
+            db.session.commit()
+
+        except Exception:
+            db.session.rollback()
+
+            # Remove S3 object if the database operation fails.
+            try:
+                s3.delete_object(
+                    Bucket=S3_BUCKET,
+                    Key=object_key
+                )
+            except Exception:
+                app.logger.exception("S3 cleanup failed")
+
+            app.logger.exception("Material upload failed")
+            flash("Upload failed", "error")
+            return redirect(url_for("new_dash"))
+
+        flash("Material uploaded successfully", "success")
+        return redirect(url_for("new_dash"))
+
+    return render_template("newdash.html", form=form)
+
+@app.route('/view/<int:material_id>')
 @login_required
-def view_file(filename):
-    print(filename)
-    # username ='admin'
-    docs = Materials.query.filter_by(filename=filename).first()
-    return send_file(docs.filepath)
+def view_file(material_id):
+
+    docs = db.session.get(Materials, material_id)
+
+    if docs is None:
+        abort(404)
+
+    # Add any course-level viewing authorization here.
+
+    try:
+        presigned_url = s3.generate_presigned_url(
+            ClientMethod='get_object',
+            Params={
+                'Bucket': S3_BUCKET,
+                'Key': docs.filepath,
+                'ResponseContentType': 'application/pdf',
+                'ResponseContentDisposition': 'inline'
+            },
+            ExpiresIn=300
+        )
+
+    except (ClientError, BotoCoreError):
+        app.logger.exception("S3 URL generation failed")
+        abort(500)
+
+    return redirect(presigned_url)
 
 @app.route('/newdash')
 @login_required

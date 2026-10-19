@@ -34,6 +34,8 @@ services:
     environment:
       # SQLAlchemy will pick this up instead of falling back to SQLite
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:${POSTGRES_PORT}/${POSTGRES_DB}
+      AWS_REGION: us-east-1
+      S3_MATERIALS_BUCKET: basharr-ansible-ssm-380142015153
     depends_on:
       db:
         condition: service_healthy

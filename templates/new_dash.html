@@ -20,10 +20,10 @@
                 {% with message=get_flashed_messages() %}
                 {% if message %}
                 {% for m in message %}
-                <p>{{message}}</p>
+                <p>{{m}}</p>
                 {% endfor %}
                 {% endif %}
-                {% endwith%}
+                {% endwith %}
             </div>
             <ul class="menu">
                 <li class="active"><a href="#"><i class="fas fa-th-large"></i> Dashboard</a></li>
@@ -118,7 +118,7 @@
         {% if doc.courseMat %}
             {% for m in doc.courseMat %}
         
-                <a href="{{url_for('view_file', filename=m.filename)}}"><p>{{m.id}}:  {{m.filename}}</p></a>
+                <a href="{{ url_for('view_file', material_id=m.id) }}"><p>---  {{m.filename}}</p></a>
                  
                 
                 
