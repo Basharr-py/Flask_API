@@ -24,7 +24,7 @@ services:
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5000/"]
-      interval: 100s
+      interval: 10s
       timeout: 5s
       retries: 3
     expose:
