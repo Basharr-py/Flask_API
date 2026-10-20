@@ -19,7 +19,7 @@ services:
 
 
   web:
-    image: basharr99/flask_app:${IMAGE_TAG}
+    image: basharr99/flask_app:${image_tag}
     container_name: flask_app
     restart: unless-stopped
     healthcheck:
