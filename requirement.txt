@@ -26,4 +26,3 @@ pytest
 ruff
 psycopg2-binary
 boto3
-curl
