@@ -122,7 +122,7 @@ jobs:
           ANSIBLE_PRIVATE_KEY_FILE: /home/runner/.ssh/ec2_key.pem
           ANSIBLE_HOST_KEY_CHECKING: "True"
           ANSIBLE_VAULT_PASSWORD_FILE: $HOME/ansible-vault.pass
-          IMAGE_TAG: ${{ github.sha }}
+          IMAGE_TAG: ${{ inputs.image_tag }}
         run: |
           ansible-playbook \
             -i inventories/for_flask \
